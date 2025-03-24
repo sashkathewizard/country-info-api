@@ -15,7 +15,7 @@ export class HttpService {
         `Error ${response.status}: ${response.statusText}`,
       );
     }
-    return response;
+    return response.json();
   }
 
   async post(url: string, body: any, options: RequestInit = {}): Promise<any> {

@@ -18,9 +18,11 @@ export class CountriesService {
   }
 
   async getAvailableCountries() {
-    const { data } = await this.httpService.get(
+    const data = await this.httpService.get(
       `${this.apiUrl}/AvailableCountries`,
     );
+    console.log(data);
+
     return data;
   }
 

@@ -28,7 +28,6 @@ model Holiday {
     user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
     name      String
     date      DateTime
-    country   String
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }

@@ -17,9 +17,11 @@ export class UserRepository {
     return this.prisma.user.findMany();
   }
 
-  create(data: Omit<User, 'id'>): Promise<User> {
+  create(data): Promise<User> {
     return this.prisma.user.create({
-      data,
+      data: {
+        ...data,
+      },
     });
   }
 

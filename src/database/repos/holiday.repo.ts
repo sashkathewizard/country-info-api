@@ -20,10 +20,16 @@ export class HolidayRepository {
     });
   }
 
-  create(data: Omit<Holiday, 'id'>): Promise<Holiday> {
+  create(holidayData: Holiday): Promise<Holiday> {
+    const { date, name, userId } = holidayData;
+
+    const data = {
+      date: new Date(date),
+      name,
+      userId,
+    };
     return this.prisma.holiday.create({
       data,
-      include: { user: true },
     });
   }
 

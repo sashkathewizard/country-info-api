@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { HolidayRepository } from 'src/database/repos/holiday.repo';
 import { UserRepository } from 'src/database/repos/user.repo';
 import { HttpService } from 'src/utils/http/http.service';
+import { CreateUserDTO } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -27,7 +28,13 @@ export class UsersService {
     year: number,
     holidays?: string[],
   ) {
-    const { data } = await this.httpService.get(
+    const user = await this.userRepo.findOne(userId);
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const data = await this.httpService.get(
       `${this.apiUrl}/PublicHolidays/${year}/${countryCode}`,
     );
 
@@ -36,7 +43,7 @@ export class UsersService {
       : data;
 
     const createdHolidays = await Promise.all(
-      filteredHolidays.map((holiday) =>
+      filteredHolidays.map(async (holiday) =>
         this.holidayRepo.create({
           ...holiday,
           userId,
@@ -47,7 +54,11 @@ export class UsersService {
     return { userId, holidays: createdHolidays };
   }
 
-  async createUser(data) {
+  async createUser(data: CreateUserDTO) {
     return await this.userRepo.create(data);
+  }
+
+  async getAllUsers() {
+    return await this.userRepo.findAll();
   }
 }
